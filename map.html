@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GradeGuardian Map</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="http://52.14.34.73:5120/css/flat.css">
+    <link rel="stylesheet" href="css/styles-map.css">
+</head>
+
+<body>
+
+    <div id="loading-screen">
+        <h1>Loading...</h1>
+    </div>
+    
+    <div id="app-content">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-unique navbar-toggleable-md">
+            <div class="container">
+                <a class="navbar-brand white-text" href="#">
+                    <img src="images/gradeguardian_logo_nobg_small.png" width="50" height="50" alt="">
+                    <span class="font-weight-bold hidden-sm-down">GradeGuardian Education Improvement Assistant</span>
+                    <span class="font-weight-bold hidden-md-up">GradeGuardian</span>
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarsExampleContainer">
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row text-center card map-container">
+                <div id="map"></div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-4 pb-2">
+                        <div class="row justify-content-center">
+                            <div class="legend green z-depth-1"></div> Above Average</div>
+                    </div>
+                    <div class="col-xs-6 col-md-4 pb-2">
+                        <div class="row justify-content-center">
+                            <div class="legend yellow z-depth-1"></div> Average</div>
+                    </div>
+                    <div class="col-xs-6 col-md-4 pb-2">
+                        <div class="row justify-content-center">
+                            <div class="legend red z-depth-1"></div> Below Average</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="card card-cascade narrower state-overview-card z-depth-2" id="overview-card" style="display: none">
+
+                    <!--Card image-->
+                    <div class="view gradient-card-header bg-unique">
+                        <h4 class="card-title"><strong><span id="overview-title">Card title</span></strong></h4>
+                    </div>
+                    <!--/Card image-->
+
+                    <div class="card-body text-center">
+                        <table style="width:100%">
+                            <tr class="green-text">
+                                <td><strong><i class="fa fa-file-text-o" aria-hidden="true"></i>&nbsp;Literacy</strong></td>
+                                <td><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;<span id="literacy-person"></span>%</td>
+                                <td><i class="fa fa-mars" aria-hidden="true"></i>&nbsp;<span id="literacy-male"></span>%</td>
+                                <td><i class="fa fa-venus" aria-hidden="true"></i>&nbsp;<span id="literacy-female"></span>%</td>
+                            </tr>
+
+                            <tr class="red-text">
+                                <td class="text-center"><strong><i class="fa fa-long-arrow-down" aria-hidden="true"></i>&nbsp;Dropout Rate</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center"><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;<span class="dropout-rate"></span>%</td>
+                            </tr>
+                        </table>
+
+                        <div id="filter-content" style="display: none">
+                            <hr>
+                            <h4 id="filter-title"></h4>
+                            <table class="pl-2 pr-2">
+                                <tr>
+                                    <td class="text-left"><strong>State</strong></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-right"><span id="filter-stat-state"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong>National Average</strong></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-right"><span id="filter-stat-avg"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong>Highest</strong></td>
+                                    <td class="text-center"><span id="filter-stat-high-name"></span></td>
+                                    <td class="text-right"><span id="filter-stat-high-data"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong>Lowest</strong></td>
+                                    <td class="text-center"><span id="filter-stat-low-name"></span></td>
+                                    <td class="text-right"><span id="filter-stat-low-data"></span></td>
+                                </tr>
+                            </table>
+                            <hr>
+                        </div>
+
+                        <div class="row justify-content-center pt-3 pb-3">
+                            <div class="col-sm-12 col-md-6">
+                                <button type="button" class="btn btn-outline-unique" data-toggle="modal" data-target="#statsModal">View more data&nbsp;<i class="fa fa-bar-chart ml-1"></i></button>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <button type="button" class="btn btn-elegant" data-toggle="modal" data-target="#predictionModal">Make a prediction&nbsp;<i class="fa fa-eye ml-1"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <!-- Spacer -->
+            <div style="height: 50px"></div>
+        </div>
+
+        <div class="container">
+            <div class="col-xs-12 text-left jumbotron card">
+                <h1 class="text-center"><i class="fa fa-list-ul ml-1"></i>&nbsp;<strong>Filters</strong></h1><br>
+                <div id="filter-container"></div>
+            </div>
+        </div>
+        
+        <div class="container-fluid bg-success mt-10 pt-5" style="height: 150px">
+            <div class="row justify-content-center">
+                <button class="btn btn-elegant btn-lg btn-rounded">View the master plan</button>
+            </div>
+        </div>
+
+        <!-- Graphs modal -->
+        <div class="modal fade" id="statsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content card z-depth-5">
+                    <div class="modal-header bg-unique white-text">
+                        <h5 class="modal-title" id="exampleModalLongTitle"><span class="title-state"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <h2 class="text-center mt-5 mb-5"><span class="bg-green card z-depth-1 white-text p-3">Attributes with highest imapct on dropout rate</span></h2>
+                        <canvas id="chart1"></canvas>
+                        <hr>
+
+                        <h2 class="text-center mt-5 mb-5"><span class="bg-amber card z-depth-1 white-text p-3">Attributes with average imapct on dropout rate</span></h2>
+                        <canvas id="chart2"></canvas>
+                        <hr>
+
+                        <h2 class="text-center mt-5 mb-5"><span class="bg-red card z-depth-1 white-text p-3">Attributes with lowest imapct on dropout rate</span></h2>
+                        <canvas id="chart3"></canvas>
+
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-unique" data-dismiss="modal">Close&nbsp;<i class="fa fa-times ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prediction modal -->
+        <div class="modal fade" id="predictionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content card z-depth-5">
+                    <div class="modal-header bg-elegant white-text">
+                        <h5 class="modal-title" id="exampleModalLongTitle"><span class="title-state"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="container">
+                            <div class="datasliders">
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage single-classroom schools</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df0-predict" dataname="Single-Classroom Schools" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage single-teacher schools</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df1-predict" dataname="Single-Teacher Schools" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with buildings</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df2-predict" dataname="Schools with Building" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with girls toilets</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df3-predict" dataname="Schools with Girls Toilet" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with boys toilets</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df4-predict" dataname="Schools with Boys Toilet" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with toilets for CWSN (Children With Special Needs)</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df5-predict" dataname="Schools with Toilet for CWSN" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with drinking water</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df6-predict" dataname="Schools with Drinking Water" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with electricity</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df7-predict" dataname="Schools with Electricity" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with ramps, if needed</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df8-predict" dataname="Schools with Ramp if Needed" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a library</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df9-predict" dataname="Schools with Library" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a full time librarian</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df10-predict" dataname="Schools with Full time Librarian" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a boundary wall</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df11-predict" dataname="Schools with Boundary wall" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools exclusively for CWSN</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df12-predict" dataname="Schools Exclusively for CWSN" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a lab assistant</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df13-predict" dataname="Schools with Lab. Assistant" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a Head Master Room</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df14-predict" dataname="Schools with Head Master Room" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a hostel for boys</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df15-predict" dataname="Schools with Hostel for Boys" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a hostel for girls</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df16-predict" dataname="Schools with Hostel for Girls" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with computers and internet</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df17-predict" dataname="Schools with Computer &amp; Internet"
+                                            min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with an ICT Laboratory</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df18-predict" dataname="Schools with ICT Laboratory" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a playground facility</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df19-predict" dataname="Schools with Playground Facility" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools which conducted medical check-ups</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df20-predict" dataname="Schools Conducted Med. Check-up" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools having SMDC</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df21-predict" dataname="Schools Having SMDC" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools with a School Building Committee</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df22-predict" dataname="Schools with Sch. Bld. Committee" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools having a PTA</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df23-predict" dataname="Schools Having PTA" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage schools sstablished since 2006</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df24-predict" dataname="Schools Established Since 2006" min="0"
+                                            max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Pupil-teacher ratio</h4>
+                                    <div class="md-form" style="width: 70%"><input class="text-center" id="df25-predict" dataname="Pupil-Teacher Ratio" type="text"
+                                            onkeypress="return isNumberKey(event)"></div>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Student-classroom ratio</h4>
+                                    <div class="md-form" style="width: 70%"><input class="text-center" id="df26-predict" dataname="Student-Classroom Ratio" type="text"
+                                            onkeypress="return isNumberKey(event)"></div>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage female teachers</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df28-predict" dataname="Female Teachers" min="0" max="100"></form>
+                                </div>
+                                <div class="row justify-content-center hover-shadow">
+                                    <h4 class="text-center" style="width: 100%;">Percentage girls enrolment</h4>
+                                    <form class="range-field" style="width: 70%"><input type="range" id="df29-predict" dataname="Girls Enrolment" min="0" max="100"></form>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row justify-content-center">
+                                <button class="btn btn-danger" id="reset-button">Reset&nbsp;<i class="fa fa-history ml-1"></i></button>
+                                <button class="btn btn-success" id="predict-button">Predict&nbsp;<i class="fa fa-eye ml-1"></i></button>
+                            </div>
+
+                            <div class="prediction-results">
+                                <hr>
+                                <div class="row h-100">
+                                    <div class="col text-center my-auto">
+                                        <h3>Predicted dropout rate:</h3>
+                                    </div>
+
+                                    <div class="col predict-result predict-higher red-text text-center">
+                                        <span class="api-result">69</span>%
+                                        <i class="fa fa-long-arrow-up" aria-hidden="true"></i>
+                                    </div>
+
+                                    <div class="col predict-result predict-same amber-text text-center">
+                                        <span class="api-result">69</span>%
+                                        –
+                                    </div>
+
+                                    <div class="col predict-result predict-lower green-text text-center">
+                                        <span class="api-result">69</span>%
+                                        <i class="fa fa-long-arrow-down" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+
+                                <div class="row h-100">
+                                    <div class="col text-center my-auto">
+                                        <h3>Current dropout rate:</h3>
+                                    </div>
+
+                                    <div class="col predict-result current-do indigo-text text-center">
+                                        <span class="dropout-rate"></span>%
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-elegant" data-dismiss="modal">Close&nbsp;<i class="fa fa-times ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <script src="http://52.14.34.73:5120/js/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+    <script src="http://52.14.34.73:5120/js/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" integrity="sha256-SiHXR50l06UwJvHhFY4e5vzwq75vEHH+8fFNpkXePr0="
+        crossorigin="anonymous"></script>
+    <script src="js/raphael.min.js"></script>
+    <script src="js/getdata.js"></script>
+    <script src="js/charthandler.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/mapcontrols.js"></script>
+    <script src="js/pagescript.js"></script>
+</body>
+
+</html>

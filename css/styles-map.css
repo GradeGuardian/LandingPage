@@ -1,0 +1,97 @@
+body {
+    background-color: #EEEEEE !important;
+}
+
+path {
+    -webkit-transition: all 200ms ease-in-out;
+    -moz-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+#loading-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: #212121;
+}
+
+#loading-screen h1 {
+    position: relative;
+    color: #EEEEEE;
+    top: 47%;
+    text-align: center;
+}
+
+#overview-card {
+    -webkit-transition: all 200ms ease-in-out;
+    -moz-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+.map-container {
+    margin-top: 20px;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding: 0 0 5px 0px;
+}
+
+#map svg {
+    padding: 5px;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+}
+
+.state-overview-card {
+    width: calc(100% - 30px) !important;
+    margin-top: 60px !important;
+    margin-bottom: 40px;
+}
+
+.legend {
+    width: 50px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.legend.green {
+    background-color: #4CAF50;
+}
+
+.legend.red {
+    background-color: #f44336;
+}
+
+.legend.yellow {
+    background-color: #FFC107;
+}
+
+
+@media (max-width:1200px){
+}
+
+@media (max-width:992px){
+}
+
+@media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+
+#filter-content table {
+    width: 90%;
+    margin-left: 20px;
+    margin-right: 20px;
+    table-layout: fixed;
+}
+
+#filter-content table td{
+    width: 33.3%;
+}
+
+.predict-result {
+    font-size: 60px;
+}
