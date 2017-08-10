@@ -85,7 +85,7 @@ function showStudentData(data) {
     $container.empty()
     
     let studentTitle = $('<h1 class="text-center text-underline text-capitalize mb-4"><span id="student-name-header">' + data.name + '</span></h1>')
-    studentTitle.append('<a class="btn-floating amber"><i class="fa fa-envelope"></i></a>')
+    studentTitle.append('<a class="btn-floating amber"><i class="fa fa-envelope mb-1 waves-effect"></i></a>')
     
     $container.append(studentTitle)
 
