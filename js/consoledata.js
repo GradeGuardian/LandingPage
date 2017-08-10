@@ -174,7 +174,7 @@ var studentDataFields = [
         evaluate: (data) => {
             if (data == "1") {
                 return "Yes"
-            } else if (data == "2") {
+            } else if (data == "0") {
                 return "No"
             }
         }
@@ -185,7 +185,7 @@ var studentDataFields = [
         evaluate: (data) => {
             if (data == "1") {
                 return "Yes"
-            } else if (data == "2") {
+            } else if (data == "0") {
                 return "No"
             }
         }
@@ -401,6 +401,39 @@ var studentDataFields = [
     {
         label: "G2",
         description: "Second semester grade",
+        evaluate: (data) => {
+            data = Number(data)*5
+
+            if ( data >= "97") {
+                return "A+"
+            } else if ( data >= "93") {
+                return "A"
+            } else if (data >= "90") {
+                return "A-"
+            } else if (data >= "87") {
+                return "B+"
+            } else if (data >= "83") {
+                return "B"
+            } else if (data >= "80") {
+                return "B-"
+            } else if (data >= "77") {
+                return "C+"
+            } else if (data >= "73") {
+                return "C"
+            } else if (data >= "70") {
+                return "C-"
+            } else if (data >= "67") {
+                return "D+"
+            } else if (data >= "65") {
+                return "D"
+            } else if (data < "65") {
+                return "F"
+            }
+        }
+    },
+    {
+        label: "predictedValue",
+        description: "Predicted grade",
         evaluate: (data) => {
             data = Number(data)*5
 
