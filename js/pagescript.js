@@ -144,7 +144,7 @@ let datafields = [
     },
 
     {
-        label: "Percentage schools sstablished since 2006",
+        label: "Percentage schools established since 2006",
         inputType: "slider",
         dataName: "Schools Established Since 2006"
     },
